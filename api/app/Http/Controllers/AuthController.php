@@ -1,16 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Traits\ApiResponser;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    use ApiResponser;
 
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         $attr = $request->validate([
             'email' => 'required|string|email|',
@@ -18,12 +16,18 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($attr)) {
-            return $this->error('Credentials not match', 401);
+            return response()->json(['message' => 'Email and password are not match'], 401);
         }
 
-        return $this->success([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken
-        ]);
+        return $this->respondWithToken(auth()->user()->createToken('API Token')->plainTextToken);
+
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
 
