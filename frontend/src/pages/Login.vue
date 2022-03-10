@@ -6,7 +6,7 @@
 
         <a-form :form="form" class="login-form user-layout-login"
                 @submit="handleSubmit">
-          <h4 class="text-muted text-center mt-3">Sign In to your account</h4>
+          <h4>Sign In to your account</h4>
           <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;"
                    message="Invalid credentials"/>
           <a-form-item>

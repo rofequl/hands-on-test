@@ -28,6 +28,18 @@ function configRoutes() {
                     path: "/dashboard",
                     name: "dashboard",
                     component: () => import("@/pages/Dashboard")
+                },
+                {
+                    meta: {title: 'Customer'},
+                    path: "/customer",
+                    name: "customer",
+                    component: () => import("@/pages/Customer")
+                },
+                {
+                    meta: {title: 'Customer Bills'},
+                    path: "/customer-bill",
+                    name: "bill",
+                    component: () => import("@/pages/Bill")
                 }
             ]
         },

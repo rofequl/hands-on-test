@@ -2,17 +2,17 @@
   <a-layout id="components-layout-demo-custom-trigger">
     <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
       <div class="logo"/>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-        <a-menu-item key="1">
-          <a-icon type="user"/>
+      <a-menu theme="dark" mode="inline" :default-selected-keys="selectedKey">
+        <a-menu-item key="1" @click="$router.push('dashboard')">
+          <a-icon type="dashboard"/>
           <span>Dashboard</span>
         </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="video-camera"/>
+        <a-menu-item key="2" @click="$router.push('customer')">
+          <a-icon type="solution"/>
           <span>Customer</span>
         </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="upload"/>
+        <a-menu-item key="3" @click="$router.push('customer-bill')">
+          <a-icon type="dollar"/>
           <span>Bill</span>
         </a-menu-item>
       </a-menu>
@@ -22,12 +22,13 @@
         <a-menu mode="horizontal" :style="{ lineHeight: '64px' }">
           <a-menu-item key="1">
             <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-                @click="() => (collapsed = !collapsed)"/>
+                    @click="() => (collapsed = !collapsed)"/>
           </a-menu-item>
           <a-menu-item key="2" style="float: right">
             <a-dropdown>
               <a class="ant-dropdown-link" @click="e => e.preventDefault()">
-                {{ $store.getters.currentUser.name }} <a-icon type="down" />
+                {{ $store.getters.currentUser.name }}
+                <a-icon type="down"/>
               </a>
               <a-menu slot="overlay">
                 <a-menu-item>
@@ -53,6 +54,14 @@ export default {
     return {
       collapsed: false,
     };
+  },
+  computed: {
+    selectedKey() {
+      if (this.$route.name === 'dashboard') return ['1']
+      if (this.$route.name === 'customer') return ['2']
+      if (this.$route.name === 'customer-bill') return ['3']
+      else return ['3']
+    }
   },
 }
 </script>
