@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,9 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
+        $product = Bill::where('customer_id', $id)->first();
+        if ($product) return response()->json(['result' => 'Error', 'message' => 'Customer already used create a bill'], 200);
+
         Customer::findOrFail($id)->delete();
         return response()->json(['result' => 'Success', 'message' => 'Customer has been deleted'], 200);
     }

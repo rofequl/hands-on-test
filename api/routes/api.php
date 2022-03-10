@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\BillController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return auth()->user();
     });
     Route::post('/auth/logout', [AuthController::class, 'logout']);
-
-    //Customer
     Route::resource('customer', CustomerController::class);
+    Route::resource('bill', BillController::class);
+    Route::post('bill-status-change', [BillController::class, 'billStatus']);
 });
