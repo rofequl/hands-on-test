@@ -4,9 +4,11 @@ import store from '@/store'
 
 Vue.use(Router)
 
-const isUserLoggedIn = (to, from, next) => store.getters.isAuthenticated ? next() : next({name: 'login'})
+const isUserLoggedIn = (to, from, next) => store.getters.isAuthenticated ? store.getters.isUserPanel ? next() : next({name: 'home'}) : next({name: 'login'})
 
 const isUserLoggedOut = (to, from, next) => store.getters.isAuthenticated ? next({name: 'dashboard'}) : next()
+
+const isCustomerLoggedIn = (to, from, next) => store.getters.isAuthenticated ? store.getters.isCustomerPanel ? next() : next({name: 'dashboard'}) : next({name: 'login'})
 
 export default new Router({
     mode: 'history',
@@ -49,6 +51,13 @@ function configRoutes() {
             name: "login",
             beforeEnter: isUserLoggedOut,
             component: () => import("@/pages/Login"),
+        },
+        {
+            meta: {title: 'Customer - Bill Info'},
+            path: "/",
+            name: "home",
+            beforeEnter: isCustomerLoggedIn,
+            component: () => import("@/pages/Index"),
         }
     ]
 }

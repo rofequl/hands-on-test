@@ -15,6 +15,12 @@ class BillController extends Controller
             ->select('customers.name as customerName', 'customers.email as customerEmail', 'bills.*')->get();
     }
 
+    public function customerBill()
+    {
+        return DB::table('bills')->join('customers', 'customers.id', '=', 'bills.customer_id')
+            ->select('customers.name as customerName', 'customers.email as customerEmail', 'bills.*')->where('bills.customer_id', auth()->user()->id)->get();
+    }
+
     public function store(Request $request)
     {
         $request->validate([

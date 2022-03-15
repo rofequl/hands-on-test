@@ -1,5 +1,5 @@
 import ApiService from "@/core/services/api.service";
-import JwtService from "@/core/services/jwt.service";
+import JwtService, {getUserType} from "@/core/services/jwt.service";
 import router from "../../router";
 
 const auth = {
@@ -7,19 +7,23 @@ const auth = {
         user: {},
         isLoad: false,
         isAuthenticated: !!JwtService.getToken(),
+        isCustomer: JwtService.getUserType() === 'customer',
     },
     getters: {
         isAuthenticated: state => state.isAuthenticated,
         currentUser: state => state.user,
         isLoadProfile: state => state.isLoad,
+        isCustomerPanel: state => state.isCustomer,
+        isUserPanel: state => !state.isCustomer,
     },
     actions: {
         LOGIN({commit}, credentials) {
             return new Promise((resolve, reject) => {
-                console.log("Done")
                 ApiService.post("auth/login", credentials)
                     .then(({data}) => {
+                        commit('SET_USER_TYPE', credentials.type);
                         commit('SET_AUTH', data);
+                        resolve();
                         resolve();
                     })
                     .catch(error => {
@@ -29,7 +33,7 @@ const auth = {
         },
         LOGOUT({commit, state}) {
             if (state.isAuthenticated) {
-                ApiService.post("auth/logout")
+                ApiService.post("auth/logout", {type: JwtService.getUserType()})
                 commit('PURGE_AUTH');
                 router.push({name: 'login'});
             }
@@ -59,6 +63,9 @@ const auth = {
             let token = user.token.split("|");
             JwtService.saveToken(token[1]);
         },
+        SET_USER_TYPE: (state, type) => {
+            JwtService.saveUserType(type);
+        },
         SET_AUTH_USERS: (state, user) => {
             state.user = user;
         },
@@ -66,6 +73,7 @@ const auth = {
             state.isAuthenticated = false;
             state.user = {};
             JwtService.destroyToken();
+            JwtService.destroyUserType();
         },
     }
 };

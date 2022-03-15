@@ -2,6 +2,7 @@ import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import JwtService from "@/core/services/jwt.service";
+import store from "@/store"
 
 import {api_base_url} from "../config/app";
 
@@ -18,6 +19,7 @@ const ApiService = {
                     reject(error);
                 });
             }
+            store.commit('PURGE_AUTH');
             return Promise.reject(error);
         });
     },

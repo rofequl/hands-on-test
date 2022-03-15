@@ -27,4 +27,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('customer', CustomerController::class);
     Route::resource('bill', BillController::class);
     Route::post('bill-status-change', [BillController::class, 'billStatus']);
+
+    Route::get('customer-bill', [BillController::class, 'customerBill']);
 });
